@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from transfer_project import ProfileModifications, AthleteProfiles
+from ProfileModifications import UserRegistrationForm, AthleteProfileForm
 from transfer_project import EligibilityLogic
 
 def register(request):
     if request.method == 'POST':
-        form = ProfileModifications(request.POST)
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
@@ -14,7 +14,7 @@ def register(request):
             login(request, user)
             return redirect('dashboard')
     else:
-        form = ProfileModifications()
+        form = UserRegistrationForm()
     return render(request, 'transfers/register.html', {'form': form})
 
 @login_required
@@ -30,12 +30,12 @@ def dashboard(request):
 def edit_profile(request):
     profile = request.user.athlete_profile
     if request.method == 'POST':
-        form = AthleteProfiles(request.POST, instance=profile)
+        form = AthleteProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
             return redirect('dashboard')
     else:
-        form = AthleteProfiles(instance=profile)
+        form = AthleteProfileForm(instance=profile)
     return render(request, 'transfers/edit_profile.html', {'form': form})
 
 def api_architecture(request):
