@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Athlete Transfer Matrix Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+    <nav class="border-b border-slate-800 bg-slate-900 px-6 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-white tracking-tight">4-Year Transfer Portal Engine</h1>
+        <div class="space-x-4 text-sm">
+            <a href="{% url 'dashboard' %}" class="text-cyan-400 hover:underline">Dashboard</a>
+            <a href="{% url 'edit_profile' %}" class="text-slate-300 hover:text-white">Edit Profile</a>
+            <a href="{% url 'api_architecture' %}" class="text-slate-300 hover:text-white">API Keys Info</a>
+            <a href="{% url 'logout' %}" class="text-rose-400 hover:underline">Logout</a>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto p-6 space-y-6">
+        <header class="flex justify-between items-center border-b border-slate-800 pb-4">
+            <div>
+                <h2 class="text-2xl font-bold text-white">{{ request.user.get_full_name|default:request.user.username }}</h2>
+                <p class="text-sm text-slate-400">Sport: {{ profile.sport }} | Current: {{ profile.current_school_name }} ({{ profile.current_division }})</p>
+            </div>
+            <a href="{% url 'edit_profile' %}" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold px-4 py-2 rounded-lg">
+                Update Record
+            </a>
+        </header>
+
+        <!-- Evaluation Results Card -->
+        <section class="p-6 rounded-xl border {% if evaluation.is_eligible %}bg-emerald-950/20 border-emerald-800 text-emerald-100{% else %}bg-rose-950/20 border-rose-800 text-rose-100{% endif %}">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs uppercase tracking-wider font-mono font-bold">Transfer Target: {{ profile.target_division }}</span>
+                <span class="px-2.5 py-1 rounded text-xs font-bold font-mono {% if evaluation.is_eligible %}bg-emerald-800 text-white{% else %}bg-rose-800 text-white{% endif %}">
+                    {% if evaluation.is_eligible %}ELIGIBLE FOR IMMEDIATE PLAY{% else %}SIT-OUT / RESIDENCY REQUIRED{% endif %}
+                </span>
+            </div>
+
+            {% if evaluation.blockers %}
+            <div class="mt-4 pt-3 border-t border-rose-900/60">
+                <h4 class="text-xs font-bold text-rose-300 uppercase mb-2">Unsatisfied Statutory Conditions:</h4>
+                <ul class="list-disc list-inside text-sm space-y-1 text-rose-200">
+                    {% for item in evaluation.blockers %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if evaluation.caveats %}
+            <div class="mt-4 pt-3 border-t border-slate-800">
+                <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Administrative Mandates:</h4>
+                <ul class="list-disc list-inside text-sm space-y-1 text-slate-300">
+                    {% for item in evaluation.caveats %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <div class="mt-4 pt-3 border-t border-slate-800/80 text-xs text-slate-400">
+                <strong>Statutory Authority:</strong> {{ evaluation.citation }}
+            </div>
+        </section>
+    </main>
+</body>
+</html>
