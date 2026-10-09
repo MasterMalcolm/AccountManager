@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from ProfileModifications import UserRegistrationForm, AthleteProfileForm
-from transfer_project import EligibilityLogic
+from Athlete_Persona import EligibilityLogic
 
 def register(request):
     if request.method == 'POST':

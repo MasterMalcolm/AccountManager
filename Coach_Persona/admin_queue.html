@@ -1,0 +1,43 @@
+<div class="max-w-5xl mx-auto my-8 p-6 bg-slate-950 text-slate-100">
+    <h1 class="text-2xl font-bold mb-4">Pending Coach Verifications</h1>
+    <table class="w-full text-left text-xs border border-slate-800">
+        <thead class="bg-slate-900 text-slate-400 border-b border-slate-800">
+            <tr>
+                <th class="p-3">User</th>
+                <th class="p-3">Email</th>
+                <th class="p-3">Claimed Institution</th>
+                <th class="p-3">Flag Reason</th>
+                <th class="p-3">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+            {% for c in coaches %}
+            <tr>
+                <td class="p-3 font-medium text-white">{{ c.user.get_full_name }}</td>
+                <td class="p-3 font-mono text-cyan-300">{{ c.user.email }}</td>
+                <td class="p-3">{{ c.institution.name }}</td>
+                <td class="p-3 text-amber-300">{{ c.review_reason }}</td>
+                <td class="p-3 space-x-2">
+                    <form method="post" action="{% url 'approve_coach' c.id %}" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="is_institution_admin" value="{% if not c.institution.has_active_admin %}true{% else %}false{% endif %}">
+                        <button type="submit" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded">
+                            Approve{% if not c.institution.has_active_admin %} (As Admin){% endif %}
+                        </button>
+                    </form>
+                    <form method="post" action="{% url 'reject_coach' c.id %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="px-3 py-1 bg-rose-600 hover:bg-rose-500 text-white rounded">
+                            Reject
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="p-4 text-center text-slate-500">No pending verification flags in the queue.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

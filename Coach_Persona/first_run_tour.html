@@ -1,0 +1,26 @@
+<div class="max-w-2xl mx-auto my-10 p-8 bg-slate-900 border border-cyan-500/30 rounded-xl text-slate-100">
+    <h2 class="text-2xl font-bold text-white mb-2">Welcome to your Portal Dashboard</h2>
+    <p class="text-sm text-cyan-400 mb-6">Claimed Program: {{ profile.program_claim }}</p>
+
+    <div class="space-y-4 mb-8 text-sm text-slate-300">
+        <div class="p-4 bg-slate-950 rounded border border-slate-800">
+            <h4 class="font-bold text-white mb-1">1. Transfer Portal Search</h4>
+            <p class="text-xs text-slate-400">Search over 2,000 NCAA & NAIA 4-year transfer student-athletes filtered by sport and position.</p>
+        </div>
+        <div class="p-4 bg-slate-950 rounded border border-slate-800">
+            <h4 class="font-bold text-white mb-1">2. Saved Filter Sets</h4>
+            <p class="text-xs text-slate-400">Store metric presets for fast access across standard recruiting windows.</p>
+        </div>
+        <div class="p-4 bg-slate-950 rounded border border-slate-800">
+            <h4 class="font-bold text-white mb-1">3. Watchlist Alerts</h4>
+            <p class="text-xs text-slate-400">Receive instant alerts when student-athletes in your pipeline update their eligibility or contact criteria.</p>
+        </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg text-sm transition">
+            Complete Onboarding & Enter Portal
+        </button>
+    </form>
+</div>
